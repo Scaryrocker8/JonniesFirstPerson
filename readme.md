@@ -1,16 +1,16 @@
 ![preview](icon.svg)
 
-# Jonnie's Refined First Person
+# Jonnie's First Person
 
 *Hey look another first person controller for Godot!*
 
-I promise this one's good.
+Well this one is mine so it's probably terrible.
 
 This is a heavily modified fork of Linko's Simple First Person Controller for Godot.
 
 https://github.com/Linko-3D/Godot-Simple-First-Person-Controller
 
-I added many QOL improvements, as well as refined things I thought other Godot FPS controllers lacked.
+I added QOL improvements, as well as things I thought other Godot FPS controllers lacked.
 
 # Things I added
 
