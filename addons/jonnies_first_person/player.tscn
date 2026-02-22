@@ -1,0 +1,162 @@
+[gd_scene format=3 uid="uid://jyncanbkjjnq"]
+
+[ext_resource type="Script" uid="uid://c1ra6l46652u8" path="res://addons/jonnies_first_person/scripts/player.gd" id="1_oul6g"]
+[ext_resource type="Script" uid="uid://v8t5tqf0ap0n" path="res://addons/jonnies_first_person/resources/footstep_resource.gd" id="2_7i78y"]
+[ext_resource type="AudioStream" uid="uid://eqlentp01xuq" path="res://addons/jonnies_first_person/sounds/footsteps/default/default_footstep_0.wav" id="2_xexn6"]
+[ext_resource type="AudioStream" uid="uid://by8dmshhu4ejq" path="res://addons/jonnies_first_person/sounds/footsteps/default/default_footstep_1.wav" id="3_7i78y"]
+[ext_resource type="AudioStream" uid="uid://cjm6gi6mm0hr0" path="res://addons/jonnies_first_person/sounds/footsteps/grass/grass_footstep_0.wav" id="3_rowsd"]
+[ext_resource type="AudioStream" uid="uid://dqxxb37fiv0jn" path="res://addons/jonnies_first_person/sounds/footsteps/default/default_footstep_2.wav" id="4_8r2p5"]
+[ext_resource type="AudioStream" uid="uid://dnaego1qoctl5" path="res://addons/jonnies_first_person/sounds/footsteps/grass/grass_footstep_1.wav" id="4_xuqrd"]
+[ext_resource type="AudioStream" uid="uid://bixovo586axcw" path="res://addons/jonnies_first_person/sounds/footsteps/grass/grass_footstep_2.wav" id="5_1ldq2"]
+[ext_resource type="AudioStream" uid="uid://q5abfjpo42gh" path="res://addons/jonnies_first_person/sounds/footsteps/default/default_footstep_3.wav" id="5_yjmjn"]
+[ext_resource type="AudioStream" uid="uid://6a0ibe1xisjr" path="res://addons/jonnies_first_person/sounds/footsteps/default/default_footstep_4.wav" id="6_j25e1"]
+[ext_resource type="AudioStream" uid="uid://bpsij3lmmwubb" path="res://addons/jonnies_first_person/sounds/footsteps/grass/grass_footstep_3.wav" id="6_pc5gf"]
+[ext_resource type="AudioStream" uid="uid://cvlvfuolwhyg1" path="res://addons/jonnies_first_person/sounds/footsteps/grass/grass_footstep_4.wav" id="7_solfg"]
+[ext_resource type="AudioStream" uid="uid://e673l1thndwg" path="res://addons/jonnies_first_person/sounds/footsteps/tiles/tiles_footstep_0.wav" id="8_solfg"]
+[ext_resource type="AudioStream" uid="uid://b63sb6jtnh65y" path="res://addons/jonnies_first_person/sounds/footsteps/tiles/tiles_footstep_1.wav" id="9_solfg"]
+[ext_resource type="AudioStream" uid="uid://bpcw6aosrjlue" path="res://addons/jonnies_first_person/sounds/footsteps/tiles/tiles_footstep_2.wav" id="10_qlcgt"]
+[ext_resource type="AudioStream" uid="uid://n6lqre3byxu6" path="res://addons/jonnies_first_person/sounds/footsteps/tiles/tiles_footstep_3.wav" id="11_yh1je"]
+[ext_resource type="AudioStream" uid="uid://cnp8xgto3wv3p" path="res://addons/jonnies_first_person/sounds/footsteps/tiles/tiles_footstep_4.wav" id="12_0vkpn"]
+[ext_resource type="Script" uid="uid://1pek5gassy7x" path="res://addons/jonnies_first_person/scripts/pause.gd" id="12_qk8yx"]
+
+[sub_resource type="Resource" id="Resource_qlcgt"]
+script = ExtResource("2_7i78y")
+footstep_name = "grass"
+footstep_sounds = Array[AudioStream]([ExtResource("3_rowsd"), ExtResource("4_xuqrd"), ExtResource("5_1ldq2"), ExtResource("6_pc5gf"), ExtResource("7_solfg")])
+metadata/_custom_type_script = "uid://v8t5tqf0ap0n"
+
+[sub_resource type="Resource" id="Resource_b6tlg"]
+script = ExtResource("2_7i78y")
+footstep_name = "tiles"
+footstep_sounds = Array[AudioStream]([ExtResource("8_solfg"), ExtResource("9_solfg"), ExtResource("10_qlcgt"), ExtResource("11_yh1je"), ExtResource("12_0vkpn")])
+metadata/_custom_type_script = "uid://v8t5tqf0ap0n"
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_oul6g"]
+radius = 0.4
+height = 1.85
+
+[sub_resource type="LabelSettings" id="LabelSettings_qk8yx"]
+font_size = 32
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_solfg"]
+
+[node name="Player" type="CharacterBody3D" unique_id=857042829 node_paths=PackedStringArray("collision", "camera", "footstep_detector", "ceiling_detector", "interact_detector", "hold_position", "head_position", "landing_animation", "footstep_audio", "reticle")]
+script = ExtResource("1_oul6g")
+collision = NodePath("CollisionShape3D")
+camera = NodePath("HeadPosition/LandingAnimation/Camera3D")
+footstep_detector = NodePath("FootstepDetector")
+ceiling_detector = NodePath("CeilingDetector")
+interact_detector = NodePath("HeadPosition/LandingAnimation/Camera3D/InteractDetector")
+hold_position = NodePath("HeadPosition/LandingAnimation/Camera3D/HoldPosition")
+head_position = NodePath("HeadPosition")
+landing_animation = NodePath("HeadPosition/LandingAnimation")
+footstep_audio = NodePath("FootstepAudio")
+reticle = NodePath("Reticle")
+footstep_user_library = Array[ExtResource("2_7i78y")]([SubResource("Resource_qlcgt"), SubResource("Resource_b6tlg")])
+footstep_default_sounds = Array[AudioStream]([ExtResource("2_xexn6"), ExtResource("3_7i78y"), ExtResource("4_8r2p5"), ExtResource("5_yjmjn"), ExtResource("6_j25e1")])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1544727262]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.925, 0)
+shape = SubResource("CapsuleShape3D_oul6g")
+debug_color = Color(1, 1, 1, 0.41960785)
+
+[node name="HeadPosition" type="Node3D" parent="." unique_id=660219595]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+
+[node name="LandingAnimation" type="Node3D" parent="HeadPosition" unique_id=695904868]
+
+[node name="Camera3D" type="Camera3D" parent="HeadPosition/LandingAnimation" unique_id=1971858706]
+
+[node name="InteractDetector" type="RayCast3D" parent="HeadPosition/LandingAnimation/Camera3D" unique_id=1523839307]
+target_position = Vector3(0, 0, -1.75)
+collide_with_areas = true
+debug_shape_custom_color = Color(0, 1, 0, 1)
+
+[node name="HoldPosition" type="Marker3D" parent="HeadPosition/LandingAnimation/Camera3D" unique_id=1038406138]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.75)
+
+[node name="FootstepDetector" type="RayCast3D" parent="." unique_id=1255488969]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+target_position = Vector3(0, -1.1, 0)
+debug_shape_custom_color = Color(0, 0, 1, 1)
+
+[node name="CeilingDetector" type="RayCast3D" parent="." unique_id=895727662]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0999999, 0)
+target_position = Vector3(0, 1, 0)
+debug_shape_custom_color = Color(1, 0, 0, 1)
+
+[node name="FootstepAudio" type="AudioStreamPlayer" parent="." unique_id=2045569915]
+volume_db = -22.0
+max_polyphony = 10
+
+[node name="Reticle" type="Control" parent="." unique_id=912937154]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Dot" type="ColorRect" parent="Reticle" unique_id=64939115]
+custom_minimum_size = Vector2(2, 2)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -1.0
+offset_top = -1.0
+offset_right = 1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Pause" type="Control" parent="." unique_id=1786672432 node_paths=PackedStringArray("player", "reticle", "title", "resume_button", "quit_button")]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("12_qk8yx")
+player = NodePath("..")
+reticle = NodePath("../Reticle")
+title = NodePath("VBoxContainer/Title")
+resume_button = NodePath("VBoxContainer/Resume")
+quit_button = NodePath("VBoxContainer/Quit")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Pause" unique_id=1739115640]
+layout_mode = 1
+offset_left = 50.0
+offset_top = 50.0
+offset_right = 656.0
+offset_bottom = 187.0
+
+[node name="Title" type="Label" parent="Pause/VBoxContainer" unique_id=571944673]
+layout_mode = 2
+text = "[Project Name]"
+label_settings = SubResource("LabelSettings_qk8yx")
+
+[node name="Resume" type="Button" parent="Pause/VBoxContainer" unique_id=607749062]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+theme_override_styles/focus = SubResource("StyleBoxEmpty_solfg")
+text = "Resume"
+flat = true
+alignment = 0
+
+[node name="Quit" type="Button" parent="Pause/VBoxContainer" unique_id=2140728645]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+theme_override_styles/focus = SubResource("StyleBoxEmpty_solfg")
+text = "Quit
+"
+flat = true
+alignment = 0
+
+[connection signal="pressed" from="Pause/VBoxContainer/Resume" to="Pause" method="_on_resume_pressed"]
+[connection signal="pressed" from="Pause/VBoxContainer/Quit" to="Pause" method="_on_quit_pressed"]
