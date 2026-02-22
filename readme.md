@@ -28,13 +28,13 @@ I added QOL improvements, as well as things I thought other Godot FPS controller
 
 - **Footstep type detection** using FootstepBody3D and FootstepResource
 
-- **Interaction system** with any CollisionBody3Ds
+- **Interaction system** with any CollisionBody3D
 
 - Ability to **pickup and throw RigidBody3Ds**, with adjustable settings for max carry weight and throw force
 
 - A **smaller reticle** (2px x 2px) for a more modern feel
 
-- A **demo project** to test all of these features!
+- A **demo project**!
 
 ![preview](preview.png)
 ![preview](preview2.png)
