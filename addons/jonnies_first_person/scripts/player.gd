@@ -8,13 +8,13 @@ const MAX_VIEW_ANGLE: int = 90
 @export_group("Player Nodes")
 @export var collision: CollisionShape3D
 @export var camera: Camera3D
-@export var footstep_detector: RayCast3D
+@export var footsteps_detector: RayCast3D
 @export var ceiling_detector: RayCast3D
 @export var interact_detector: RayCast3D
 @export var hold_position: Marker3D
 @export var head_position: Node3D
 @export var landing_animation: Node3D
-@export var footstep_audio: AudioStreamPlayer
+@export var footsteps_audio: AudioStreamPlayer
 @export var reticle: Control
 
 @export_group("Player Settings")
@@ -38,18 +38,18 @@ const MAX_VIEW_ANGLE: int = 90
 @export var min_landing_amplitude: float = 0.0
 @export var max_landing_amplitude: float = 0.3
 
-@export_group("Footstep Settings")
-@export var footstep_user_library: Array[FootstepResource]
-@export var footstep_default_sounds: Array[AudioStream]
-@export var footstep_step_distance: float = 2.1
-@export var randomize_footstep_pitch: bool = true
-@export var randomize_footstep_volume: bool = true
-@export var min_footstep_pitch: float = 0.95
-@export var max_footstep_pitch: float = 1.05
-@export var min_footstep_volume: float = -28.0
-@export var max_footstep_volume: float = -23.0
-@export var walk_footstep_volume: float = -30.0
-@export var crouch_footstep_volume: float = -32.0
+@export_group("Footsteps Settings")
+@export var footsteps_user_library: Array[FootstepsResource]
+@export var footsteps_default_sounds: Array[AudioStream]
+@export var footsteps_step_distance: float = 2.1
+@export var randomize_footsteps_pitch: bool = true
+@export var randomize_footsteps_volume: bool = true
+@export var min_footsteps_pitch: float = 0.95
+@export var max_footsteps_pitch: float = 1.05
+@export var min_footsteps_volume: float = -28.0
+@export var max_footsteps_volume: float = -23.0
+@export var walk_footsteps_volume: float = -30.0
+@export var crouch_footsteps_volume: float = -32.0
 
 @export_group("Interact Settings")
 @export var enable_reticle: bool = true
@@ -59,10 +59,13 @@ const MAX_VIEW_ANGLE: int = 90
 @export var throw_force: float = 15.0
 
 @export_group("Input Settings")
+@export_range(0.01, 1, 0.001) var mouse_sensitivity: float = 0.1
 @export var input_smoothing: bool = true
 @export var input_smoothing_amount: float = 20.0
-@export_subgroup("Keyboard Support")
-@export_range(0.01, 1, 0.001) var mouse_sensitivity: float = 0.1
+@export var motion_blur: bool = false
+@export_range(0.0, 1.0) var motion_blur_strength: float = 0.05
+@export_range(4, 32) var motion_blur_samples: int = 16
+@export_range(0.0, 1.0) var motion_blur_smoothing: float = 0.9
 @export var keyboard_inputs: Dictionary = {
 	move_left = 	"move_left",
 	move_right = 	"move_right",
@@ -99,7 +102,7 @@ var head_bob_time: float
 var target_rotation_x: float
 var target_rotation_y: float
 
-var footstep_name: String
+var footsteps_name: String
 
 var held_object: RigidBody3D = null
 
@@ -161,11 +164,11 @@ func _physics_process(delta: float) -> void:
 				
 		if is_crouching:
 			speed = crouch_speed
-			footstep_audio.volume_db = crouch_footstep_volume	
+			footsteps_audio.volume_db = crouch_footsteps_volume	
 			collision.shape.height = lerp(collision.shape.height, crouch_depth, crouch_lerp_value)
 		elif is_walking:
 			speed = walk_speed
-			footstep_audio.volume_db = walk_footstep_volume
+			footsteps_audio.volume_db = walk_footsteps_volume
 			collision.shape.height = lerp(collision.shape.height, original_player_height, crouch_lerp_value)
 		else:
 			speed = run_speed
@@ -177,7 +180,7 @@ func _physics_process(delta: float) -> void:
 
 	distance += get_real_velocity().length() * delta
 
-	if distance >= footstep_step_distance:
+	if distance >= footsteps_step_distance:
 		distance = 0.0
 		if speed >= crouch_speed:
 			_play_random_footstep_sound()
@@ -369,26 +372,26 @@ func _play_landing_animation(landing_velocity: float) -> void:
 
 func _play_random_footstep_sound() -> void:
 
-	if footstep_detector.is_colliding():
+	if footsteps_detector.is_colliding():
 
-		if footstep_detector.get_collider() is FootstepBody3D:
+		if footsteps_detector.get_collider() is FootstepsBody3D:
 
-			footstep_name = footstep_detector.get_collider().footstep_type
+			footsteps_name = footsteps_detector.get_collider().footsteps_type
 
-			for footstep_resource in footstep_user_library.size():
-				match footstep_user_library[footstep_resource].footstep_name:
-					footstep_name:
-						footstep_audio.stream = footstep_user_library[footstep_resource].footstep_sounds.pick_random()
+			for footsteps_resource in footsteps_user_library.size():
+				match footsteps_user_library[footsteps_resource].footsteps_name:
+					footsteps_name:
+						footsteps_audio.stream = footsteps_user_library[footsteps_resource].footsteps_sounds.pick_random()
 
-		elif footstep_default_sounds.size() != 0:
-			footstep_audio.stream = footstep_default_sounds.pick_random()
+		elif footsteps_default_sounds.size() != 0:
+			footsteps_audio.stream = footsteps_default_sounds.pick_random()
 
-	if randomize_footstep_pitch:
-		footstep_audio.pitch_scale = randf_range(min_footstep_pitch, max_footstep_pitch)
+	if randomize_footsteps_pitch:
+		footsteps_audio.pitch_scale = randf_range(min_footsteps_pitch, max_footsteps_pitch)
 
-	if randomize_footstep_volume:
-		footstep_audio.volume_db = randf_range(max_footstep_volume, min_footstep_volume)
+	if randomize_footsteps_volume:
+		footsteps_audio.volume_db = randf_range(max_footsteps_volume, min_footsteps_volume)
 
-	footstep_audio.play()
+	footsteps_audio.play()
 
 #endregion

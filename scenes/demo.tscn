@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://b08l17iep7lbo"]
 
 [ext_resource type="Texture2D" uid="uid://bqtcgyowqahnr" path="res://assets/grass.jpg" id="1_msxrg"]
-[ext_resource type="Script" uid="uid://bw8bvmcgsptj2" path="res://addons/jonnies_first_person/resources/footstep_body_3d.gd" id="2_7futf"]
+[ext_resource type="Script" uid="uid://bw8bvmcgsptj2" path="res://addons/jonnies_first_person/resources/footsteps_body_3d.gd" id="2_7futf"]
 [ext_resource type="Texture2D" uid="uid://hl3ksd2oawh7" path="res://assets/tiles.jpg" id="3_annih"]
 [ext_resource type="PackedScene" uid="uid://jyncanbkjjnq" path="res://addons/jonnies_first_person/player.tscn" id="4_vephn"]
 
@@ -187,24 +187,24 @@ shape = SubResource("ConvexPolygonShape3D_vephn")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 0, 0)
 mesh = SubResource("PlaneMesh_e66cg")
 
-[node name="FootstepBody3D" type="StaticBody3D" parent="Floor/Grass" unique_id=1102228853]
-editor_description = "Grab FootstepResource name properties from Player's footstep_user_library"
+[node name="FootstepsBody3D" type="StaticBody3D" parent="Floor/Grass" unique_id=1102228853]
+editor_description = "Grab FootstepsResource name property from Player's footsteps_user_library"
 script = ExtResource("2_7futf")
-footstep_type = "grass"
+footsteps_type = "grass"
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor/Grass/FootstepBody3D" unique_id=2096322211]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor/Grass/FootstepsBody3D" unique_id=2096322211]
 shape = SubResource("ConvexPolygonShape3D_h5dly")
 
 [node name="Tiles" type="MeshInstance3D" parent="Floor" unique_id=79258585]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 0, 25)
 mesh = SubResource("PlaneMesh_5fme1")
 
-[node name="FootstepBody3D" type="StaticBody3D" parent="Floor/Tiles" unique_id=283673749]
-editor_description = "Grab FootstepResource name properties from Player's footstep_user_library"
+[node name="FootstepsBody3D" type="StaticBody3D" parent="Floor/Tiles" unique_id=283673749]
+editor_description = "Grab FootstepsResource name property from Player's footsteps_user_library"
 script = ExtResource("2_7futf")
-footstep_type = "tiles"
+footsteps_type = "tiles"
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor/Tiles/FootstepBody3D" unique_id=57861574]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor/Tiles/FootstepsBody3D" unique_id=57861574]
 shape = SubResource("ConvexPolygonShape3D_6gsge")
 
 [node name="Structures" type="Node3D" parent="." unique_id=1279226775]
@@ -384,3 +384,4 @@ horizontal_alignment = 1
 
 [node name="Player" parent="." unique_id=857042829 instance=ExtResource("4_vephn")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 32)
+motion_blur = true

@@ -2,6 +2,7 @@
 extends EditorPlugin
 
 func _enable_plugin() -> void:
+
 	# Add Keyboard input actions
 	add_action_event("move_left", create_key_event(KEY_A))
 	add_action_event("move_right", create_key_event(KEY_D))
@@ -12,7 +13,6 @@ func _enable_plugin() -> void:
 	add_action_event("crouch", create_key_event(KEY_CTRL))
 	add_action_event("pause", create_key_event(KEY_ESCAPE))
 	add_action_event("interact", create_key_event(KEY_E))
-
 	add_action_event("throw", create_mouse_event(MOUSE_BUTTON_LEFT))
 
 	# Add Gamepad input actions
@@ -26,7 +26,6 @@ func _enable_plugin() -> void:
 	add_action_event("look_down", create_joy_axis_event(JOY_AXIS_RIGHT_Y, 1.0))
 	add_action_event("throw", create_joy_axis_event(JOY_AXIS_TRIGGER_RIGHT, 1.0))
 	add_action_event("walk", create_joy_axis_event(JOY_AXIS_TRIGGER_LEFT, 1.0))
-
 	add_action_event("jump", create_joy_button_event(JOY_BUTTON_A))
 	add_action_event("crouch", create_joy_button_event(JOY_BUTTON_B))
 	add_action_event("interact", create_joy_button_event(JOY_BUTTON_X))
@@ -137,4 +136,3 @@ func _is_same_input(a: InputEvent, b: InputEvent) -> bool:
 	return false
 
 #endregion
-

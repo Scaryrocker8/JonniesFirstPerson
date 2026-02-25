@@ -3,8 +3,8 @@ class_name Pause
 
 @export_group("Pause Nodes")
 @export var player: Player
-@export var reticle: Control
 @export var title: Label
+@export var reticle: Control
 @export var resume_button: Button
 @export var quit_button: Button
 

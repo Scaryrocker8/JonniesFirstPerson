@@ -14,27 +14,29 @@ I added QOL improvements, as well as things I thought other Godot FPS controller
 
 # Things I added
 
-- **Export variables** for node referencing, player settings, advanced player settings, footstep, interact and input settings. This should keep child nodes modular without breaking dependencies, as well as add more user customization control
+- **Export Variables** for node referencing, player settings, advanced player settings, footstep, interact and input settings. This should keep child nodes modular without breaking dependencies, as well as add more user customization control
 
 - **Plugin** that when enabled will automatically set up all of the input mapping (No longer do you need to manually do this yourself every time you grab a new controller from the asset library!)
 
-- **Gamepad support**
+- **Gamepad Support**
 
-- **Motion and input smoothing** for mouse and gamepad
+- **Motion Blur**, with adjustable strength, samples and smoothing *(experimental. disabled by default)*
 
-- ***Head bob*** *(everybody loves head bob)*
+- **Motion and Input Smoothing** for mouse and gamepad
+
+- ***Head Bob*** *(everybody loves head bob)*
 
 - A simple **Pause Menu** to resume or quit the game from
 
-- **Footstep type detection** using FootstepBody3D and FootstepResource
+- **Footstep Type Detection** using FootstepsBody3D and FootstepsResource
 
-- **Interaction system** with any CollisionBody3D
+- **Interaction System** with any CollisionBody3D
 
-- Ability to **pickup and throw RigidBody3Ds**, with adjustable settings for max carry weight and throw force
+- Ability to **Pickup and Throw RigidBody3Ds**, with adjustable settings for max carry weight and throw force
 
-- A **smaller reticle** (2px x 2px) for a more modern feel
+- A **Smaller Reticle** (2px x 2px) for a more modern feel
 
-- A **demo project**!
+- A **Demo Project**!
 
 ![preview](preview.png)
 ![preview](preview2.png)
