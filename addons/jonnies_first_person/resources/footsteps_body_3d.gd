@@ -1,5 +1,5 @@
 @tool
-@icon("res://addons/jonnies_first_person/resources/FootstepBody3D.svg")
+@icon("res://addons/jonnies_first_person/resources/FootstepsBody3D.svg")
 extends StaticBody3D
 class_name FootstepsBody3D
 

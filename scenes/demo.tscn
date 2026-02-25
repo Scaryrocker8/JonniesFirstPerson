@@ -384,4 +384,3 @@ horizontal_alignment = 1
 
 [node name="Player" parent="." unique_id=857042829 instance=ExtResource("4_vephn")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 32)
-motion_blur = true
