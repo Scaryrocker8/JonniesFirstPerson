@@ -1,11 +1,10 @@
 [gd_scene format=3 uid="uid://b08l17iep7lbo"]
 
+[ext_resource type="PackedScene" uid="uid://fsg00s7peuag" path="res://addons/weather-3d/weather_3d.tscn" id="1_b0nem"]
 [ext_resource type="Texture2D" uid="uid://bqtcgyowqahnr" path="res://assets/grass.jpg" id="1_msxrg"]
 [ext_resource type="Script" uid="uid://bw8bvmcgsptj2" path="res://addons/jonnies_first_person/resources/footsteps_body_3d.gd" id="2_7futf"]
 [ext_resource type="Texture2D" uid="uid://hl3ksd2oawh7" path="res://assets/tiles.jpg" id="3_annih"]
 [ext_resource type="PackedScene" uid="uid://jyncanbkjjnq" path="res://addons/jonnies_first_person/player.tscn" id="4_vephn"]
-
-[sub_resource type="Environment" id="Environment_vephn"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_3hp5k"]
 size = Vector2(25, 50)
@@ -165,8 +164,8 @@ font_size = 20
 
 [node name="Demo" type="Node3D" unique_id=205418554]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1734969170]
-environment = SubResource("Environment_vephn")
+[node name="Weather3D" parent="." unique_id=552114277 instance=ExtResource("1_b0nem")]
+weather_type = 6
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=978860625]
 transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)

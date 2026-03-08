@@ -1,0 +1,170 @@
+[gd_scene format=3 uid="uid://fsg00s7peuag"]
+
+[ext_resource type="Script" uid="uid://b66n0h406snv7" path="res://addons/weather-3d/scripts/weather_3d.gd" id="1_50oab"]
+[ext_resource type="Environment" uid="uid://bdtkhhddgn4ii" path="res://addons/weather-3d/resources/environments/clear_environment.tres" id="2_nxkxj"]
+[ext_resource type="Environment" uid="uid://b4vj3po1ieylb" path="res://addons/weather-3d/resources/environments/overcast_environment.tres" id="2_qgi7o"]
+[ext_resource type="Shader" uid="uid://dnc6o4l7roh0x" path="res://addons/weather-3d/resources/shaders/puddles.gdshader" id="3_blrjq"]
+[ext_resource type="Environment" uid="uid://bjnarllsp0bi0" path="res://addons/weather-3d/resources/environments/light_rain_environment.tres" id="3_mdxfx"]
+[ext_resource type="Environment" uid="uid://b4ojprfcgi4al" path="res://addons/weather-3d/resources/environments/heavy_rain_environment.tres" id="4_g70d8"]
+[ext_resource type="Script" uid="uid://cnvnimr5mleq" path="res://addons/weather-3d/scripts/puddle_setup.gd" id="4_vnr8f"]
+[ext_resource type="AudioStream" uid="uid://1vnvd5hakpt2" path="res://addons/weather-3d/sounds/rain.wav" id="5_nx0hu"]
+[ext_resource type="Environment" uid="uid://cyivqr1tn1vo3" path="res://addons/weather-3d/resources/environments/thunderstorm_environment.tres" id="6_gapyn"]
+[ext_resource type="AudioStream" uid="uid://bfjal7gthwyv3" path="res://addons/weather-3d/sounds/clear.wav" id="6_qgi7o"]
+[ext_resource type="Environment" uid="uid://xgieb3p50a6e" path="res://addons/weather-3d/resources/environments/light_snow_environment.tres" id="7_yr6hy"]
+[ext_resource type="Environment" uid="uid://bp5iqrbeud1xp" path="res://addons/weather-3d/resources/environments/heavy_snow_environment.tres" id="8_hf3a8"]
+[ext_resource type="AudioStream" uid="uid://dvbkno8jicwfq" path="res://addons/weather-3d/sounds/thunder.wav" id="10_n6y6t"]
+[ext_resource type="AudioStream" uid="uid://cob2n0yet6k1l" path="res://addons/weather-3d/sounds/snow.wav" id="13_soe3v"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_hvxpl"]
+lifetime_randomness = 1.0
+emission_shape_scale = Vector3(20, 20, 20)
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+linear_accel_min = 99.99999
+linear_accel_max = 99.99999
+radial_accel_min = -0.5000022
+radial_accel_max = 0.49999776
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_x0xbu"]
+billboard_mode = 2
+
+[sub_resource type="QuadMesh" id="QuadMesh_a3umk"]
+material = SubResource("StandardMaterial3D_x0xbu")
+size = Vector2(0.001, 1)
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_5lrxa"]
+_surfaces = [{
+"aabb": AABB(-1, -1, 0, 4, 4, 1e-05),
+"format": 34359738369,
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 3,
+"vertex_data": PackedByteArray(0, 0, 128, 191, 0, 0, 128, 191, 0, 0, 0, 0, 0, 0, 64, 64, 0, 0, 128, 191, 0, 0, 0, 0, 0, 0, 128, 191, 0, 0, 64, 64, 0, 0, 0, 0)
+}]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1ioi5"]
+render_priority = 0
+shader = ExtResource("3_blrjq")
+shader_parameter/puddle_color = Color(0.25565878, 0.2556588, 0.25565875, 0.7254902)
+shader_parameter/puddle_reflectivness = 2.0
+shader_parameter/puddle_micro_mask_size = 5.0
+shader_parameter/puddle_macro_mask_size = 25.0
+shader_parameter/puddle_mask_threshold = 0.33
+shader_parameter/ssr_resolution = 1.0
+shader_parameter/ssr_max_travel = 30.0
+shader_parameter/ssr_max_diff = 4.0
+shader_parameter/ssr_screen_border_fadeout = 0.3
+shader_parameter/ripple_max_radius = 2.0
+shader_parameter/ripple_scale = 0.20000000298024
+shader_parameter/ripple_speed = 1.24999997578532
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_yr6hy"]
+lifetime_randomness = 1.0
+emission_shape_scale = Vector3(20, 20, 20)
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+gravity = Vector3(0.125, -0.25, 0)
+scale_min = 0.01
+scale_max = 1.1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yr6hy"]
+roughness = 0.0
+rim_enabled = true
+clearcoat_enabled = true
+refraction_enabled = true
+refraction_scale = 1.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_soe3v"]
+material = SubResource("StandardMaterial3D_yr6hy")
+radius = 0.02
+height = 0.04
+radial_segments = 4
+rings = 1
+
+[node name="Weather3D" type="Node3D" unique_id=552114277 node_paths=PackedStringArray("world_environment", "rain", "rain_particles", "puddle", "lightning", "snow", "snow_particles", "clear_sound", "rain_sound", "thunder_sound", "snow_sound", "lightning_wait_duration")]
+script = ExtResource("1_50oab")
+world_environment = NodePath("WorldEnvironment")
+rain = NodePath("WeatherTypes/Rain")
+rain_particles = NodePath("WeatherTypes/Rain/RainParticles")
+puddle = NodePath("WeatherTypes/Rain/Puddle")
+lightning = NodePath("WeatherTypes/Rain/Lightning")
+snow = NodePath("WeatherTypes/Snow")
+snow_particles = NodePath("WeatherTypes/Snow/SnowParticles")
+clear_environment = ExtResource("2_nxkxj")
+overcast_environment = ExtResource("2_qgi7o")
+light_rain_environment = ExtResource("3_mdxfx")
+heavy_rain_environment = ExtResource("4_g70d8")
+thunderstorm_environment = ExtResource("6_gapyn")
+light_snow_environment = ExtResource("7_yr6hy")
+heavy_snow_environment = ExtResource("8_hf3a8")
+clear_sound = NodePath("WeatherTypes/Clear/ClearSound")
+rain_sound = NodePath("WeatherTypes/Rain/RainSound")
+thunder_sound = NodePath("WeatherTypes/Rain/Lightning/ThunderSound")
+snow_sound = NodePath("WeatherTypes/Snow/SnowSound")
+lightning_wait_duration = NodePath("WeatherTypes/Rain/Lightning/LightningWaitDuration")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1861161683]
+environment = ExtResource("2_nxkxj")
+
+[node name="WeatherTypes" type="Node" parent="." unique_id=534541784]
+
+[node name="Clear" type="Node" parent="WeatherTypes" unique_id=622240130]
+
+[node name="ClearSound" type="AudioStreamPlayer" parent="WeatherTypes/Clear" unique_id=599775424]
+stream = ExtResource("6_qgi7o")
+volume_db = 3.0
+pitch_scale = 1.13
+
+[node name="Rain" type="Node3D" parent="WeatherTypes" unique_id=911022749]
+visible = false
+
+[node name="RainParticles" type="GPUParticles3D" parent="WeatherTypes/Rain" unique_id=1131854854]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+amount = 10250
+preprocess = 2.0
+randomness = 1.0
+process_material = SubResource("ParticleProcessMaterial_hvxpl")
+draw_pass_1 = SubResource("QuadMesh_a3umk")
+
+[node name="Puddle" type="MeshInstance3D" parent="WeatherTypes/Rain" unique_id=1007735319]
+cast_shadow = 0
+extra_cull_margin = 16384.0
+gi_mode = 0
+mesh = SubResource("ArrayMesh_5lrxa")
+surface_material_override/0 = SubResource("ShaderMaterial_1ioi5")
+script = ExtResource("4_vnr8f")
+
+[node name="RainSound" type="AudioStreamPlayer" parent="WeatherTypes/Rain" unique_id=1347495993]
+stream = ExtResource("5_nx0hu")
+volume_db = -7.0
+pitch_scale = 1.2
+
+[node name="Lightning" type="DirectionalLight3D" parent="WeatherTypes/Rain" unique_id=521868506]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+visible = false
+light_energy = 16.0
+light_angular_distance = 50.0
+shadow_enabled = true
+
+[node name="LightningWaitDuration" type="Timer" parent="WeatherTypes/Rain/Lightning" unique_id=899855922]
+wait_time = 13.95157989931922
+one_shot = true
+
+[node name="ThunderSound" type="AudioStreamPlayer" parent="WeatherTypes/Rain/Lightning" unique_id=512879333]
+stream = ExtResource("10_n6y6t")
+
+[node name="Snow" type="Node3D" parent="WeatherTypes" unique_id=830558070]
+visible = false
+
+[node name="SnowParticles" type="GPUParticles3D" parent="WeatherTypes/Snow" unique_id=1067368311]
+amount = 37500
+lifetime = 15.0
+preprocess = 5.0
+process_material = SubResource("ParticleProcessMaterial_yr6hy")
+draw_pass_1 = SubResource("SphereMesh_soe3v")
+
+[node name="SnowSound" type="AudioStreamPlayer" parent="WeatherTypes/Snow" unique_id=697862586]
+stream = ExtResource("13_soe3v")
+volume_db = -6.0
+
+[connection signal="timeout" from="WeatherTypes/Rain/Lightning/LightningWaitDuration" to="." method="_on_lightning_wait_duration_timeout"]
