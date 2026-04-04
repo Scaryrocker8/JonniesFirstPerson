@@ -38,7 +38,7 @@ I added QOL improvements, as well as things I thought other Godot FPS controller
 
 - A **Demo Project**!
 
-![preview](preview.png)
+![preview](new_preview.png)
 ![preview](preview2.png)
 
 Created by Jonnie Gieringer
