@@ -16,6 +16,7 @@ const MAX_VIEW_ANGLE: int = 90
 @export var landing_animation: Node3D
 @export var footsteps_audio: AudioStreamPlayer
 @export var reticle: Control
+@export var reticle_texture_rect: TextureRect
 
 @export_group("Player Settings")
 @export var run_speed: float = 5.0
@@ -25,11 +26,16 @@ const MAX_VIEW_ANGLE: int = 90
 @export var toggle_walk: bool = false
 @export var toggle_crouch: bool = false
 @export var motion_smoothing: bool = true
+@export var camera_fov: float = 75.0
 @export var motion_smoothing_amount: float = 10.0
 @export var head_bob: bool = true
 @export var head_bob_frequency: float = 3.0
 @export var head_bob_amplitude: float = 0.04
+@export var idle_head_bob: bool = true
+@export var idle_head_bob_frequency: float = 1.5
+@export var idle_head_bob_amplitude: float = 0.023
 @export var jump_velocity: float = 6.0
+@export var respawn_when_out_of_bounds: bool = true
 @export var out_of_bounds_y_threshold: float = -100.0
 @export_subgroup("Advanced Player Settings")
 @export var crouch_lerp_value: float = 0.1
@@ -52,11 +58,15 @@ const MAX_VIEW_ANGLE: int = 90
 @export var crouch_footsteps_volume: float = -32.0
 
 @export_group("Interact Settings")
-@export var enable_reticle: bool = true
-@export var max_carry_weight: float = 30.0	# In kilograms
+@export var max_carry_weight: float = 30.0 # In kilograms
 @export var pull_power: float = 20.0
 @export var force_drop_distance: float = 1.0
 @export var throw_force: float = 15.0
+
+@export_group("Reticle Settings")
+@export var enable_reticle: bool = true
+@export var reticle_texture: Texture2D
+@export var reticle_size: float = 1.0
 
 @export_group("Input Settings")
 @export_range(0.01, 1, 0.001) var mouse_sensitivity: float = 0.1
@@ -67,29 +77,29 @@ const MAX_VIEW_ANGLE: int = 90
 @export_range(4, 32) var motion_blur_samples: int = 16
 @export_range(0.0, 1.0) var motion_blur_smoothing: float = 0.9
 @export var keyboard_inputs: Dictionary = {
-	move_left = 	"move_left",
-	move_right = 	"move_right",
-	move_forward = 	"move_forward",
+	move_left = "move_left",
+	move_right = "move_right",
+	move_forward = "move_forward",
 	move_backward = "move_backward",
-	jump = 			"jump",
-	walk = 			"walk",
-	crouch = 		"crouch",
-	pause = 		"pause",
-	interact = 		"interact",
-	throw = 		"throw"
+	jump = "jump",
+	walk = "walk",
+	crouch = "crouch",
+	pause = "pause",
+	interact = "interact",
+	throw = "throw"
 }
 
 @export_subgroup("Gamepad Support")
-@export var gamepad_support : bool = true
-@export_range(0.01, 1, 0.001) var gamepad_sensitivity : float = 0.035
+@export var gamepad_support: bool = true
+@export_range(0.01, 1, 0.001) var gamepad_sensitivity: float = 0.035
 @export var gamepad_deadzone: float = 0.2
 @export var invert_camera_y_axis: bool = false
 @export var invert_camera_x_axis: bool = false
 @export var gamepad_inputs: Dictionary = {
-	look_left = 	"look_left",
-	look_right = 	"look_right",
-	look_up = 		"look_up",
-	look_down = 	"look_down",
+	look_left = "look_left",
+	look_right = "look_right",
+	look_up = "look_up",
+	look_down = "look_down",
 }
 
 @onready var spawn_position: Vector3 = position
@@ -99,6 +109,7 @@ const MAX_VIEW_ANGLE: int = 90
 var distance: float
 var landing_velocity: float
 var head_bob_time: float
+var idle_head_bob_time: float
 var target_rotation_x: float
 var target_rotation_y: float
 
@@ -111,7 +122,13 @@ var is_crouching: bool = false
 
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	
 	_check_input_actions()
+
+	reticle_texture_rect.texture = reticle_texture
+
+	target_rotation_x = camera.rotation.x
+	target_rotation_y = rotation.y
 
 #region Input
 
@@ -133,10 +150,9 @@ func _input(event: InputEvent) -> void:
 #region Physics Process
 
 func _physics_process(delta: float) -> void:
-
 	if not is_on_floor():
 		velocity += get_gravity() * (delta * 2)
-		landing_velocity = -velocity.y
+		landing_velocity = - velocity.y
 		distance = 0.0
 
 	elif is_on_floor():
@@ -164,7 +180,7 @@ func _physics_process(delta: float) -> void:
 				
 		if is_crouching:
 			speed = crouch_speed
-			footsteps_audio.volume_db = crouch_footsteps_volume	
+			footsteps_audio.volume_db = crouch_footsteps_volume
 			collision.shape.height = lerp(collision.shape.height, crouch_depth, crouch_lerp_value)
 		elif is_walking:
 			speed = walk_speed
@@ -202,9 +218,9 @@ func _physics_process(delta: float) -> void:
 
 	if gamepad_support:
 		var gamepad_view_rotation: Vector2 = Input.get_vector(
-			gamepad_inputs.look_left, 
-			gamepad_inputs.look_right, 
-			gamepad_inputs.look_down, 
+			gamepad_inputs.look_left,
+			gamepad_inputs.look_right,
+			gamepad_inputs.look_down,
 			gamepad_inputs.look_up,
 			gamepad_deadzone
 		)
@@ -229,6 +245,8 @@ func _physics_process(delta: float) -> void:
 	else:
 		velocity.x = move_toward(velocity.x, 0, speed)
 		velocity.z = move_toward(velocity.z, 0, speed)
+
+	camera.fov = lerp(camera.fov, camera_fov, delta * 10)
 
 	_check_reticle_visible()
 
@@ -280,8 +298,10 @@ func _check_reticle_visible() -> void:
 	else:
 		reticle.visible = false
 
+	reticle_texture_rect.custom_minimum_size = Vector2(reticle_size * 100, reticle_size * 100)
+
 func _check_player_out_of_bounds() -> void:
-	if position.y < out_of_bounds_y_threshold:
+	if respawn_when_out_of_bounds and position.y < out_of_bounds_y_threshold:
 		position = spawn_position
 
 #endregion
@@ -291,7 +311,6 @@ func _check_player_out_of_bounds() -> void:
 func _handle_interaction() -> void:
 	# Interaction is handled based on whether a CollisionObject3D has an interact() function,
 	# or if it's a RigidBody3D that weighs under the Player's max carry weight.
-
 	if interact_detector.is_colliding():
 		var target = interact_detector.get_collider()
 
@@ -318,11 +337,11 @@ func _drop_object() -> void:
 		held_object = null
 
 func _throw_object() -> void:
-	var throw_direction: Vector3 = -camera.global_transform.basis.z
+	var throw_direction: Vector3 = - camera.global_transform.basis.z
 
 	held_object.lock_rotation = false
 	held_object.gravity_scale = 1.0
-	held_object.remove_collision_exception_with(self)
+	held_object.remove_collision_exception_with(self )
 
 	held_object.apply_central_impulse(throw_direction * throw_force)
 
@@ -349,11 +368,19 @@ func _handle_head_bob(delta: float) -> void:
 		if is_on_floor() and velocity.length() > 0.1:
 			head_bob_time += delta * velocity.length() * float(is_on_floor())
 			camera.transform.origin = _head_bob_calculation(head_bob_time)
+		elif idle_head_bob and is_on_floor():
+			idle_head_bob_time += delta
+			camera.transform.origin = _idle_head_bob_calculation(idle_head_bob_time)
 
 func _head_bob_calculation(time: float) -> Vector3:
 	var head_position = Vector3.ZERO
 	head_position.y = sin(time * head_bob_frequency) * head_bob_amplitude
 	head_position.x = cos(time * head_bob_frequency / 2) * head_bob_amplitude
+	return head_position
+
+func _idle_head_bob_calculation(time: float) -> Vector3:
+	var head_position = Vector3.ZERO
+	head_position.y = sin(time * idle_head_bob_frequency) * idle_head_bob_amplitude
 	return head_position
 
 #endregion
@@ -371,11 +398,8 @@ func _play_landing_animation(landing_velocity: float) -> void:
 	tween.tween_property(landing_animation, "position:y", 0, amplitude)
 
 func _play_random_footstep_sound() -> void:
-
 	if footsteps_detector.is_colliding():
-
 		if footsteps_detector.get_collider() is FootstepsBody3D:
-
 			footsteps_name = footsteps_detector.get_collider().footsteps_type
 
 			for footsteps_resource in footsteps_user_library.size():
