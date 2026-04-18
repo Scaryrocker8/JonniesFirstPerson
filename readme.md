@@ -34,7 +34,7 @@ I added QOL improvements, as well as things I thought other Godot FPS controller
 
 - Ability to **Pickup and Throw RigidBody3Ds**, with adjustable settings for max carry weight and throw force
 
-- A **Smaller Reticle** (2px x 2px) for a more modern feel
+- **Custom Reticles** using hc's crosshairs and reticles from OpenGameArt.org
 
 - A **Demo Project**!
 
