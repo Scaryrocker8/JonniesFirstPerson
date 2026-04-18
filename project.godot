@@ -12,10 +12,10 @@ config_version=5
 
 config/name="Jonnie's First Person"
 config/description="A demo project for my first person controller for Godot!"
-config/version="1.0.0"
+config/version="1.0.2"
 run/main_scene="uid://b08l17iep7lbo"
 config/features=PackedStringArray("4.6", "Forward Plus")
-config/icon="uid://bdvpkaqv42e5e"
+config/icon="uid://48lhs8d0x4tg"
 
 [audio]
 
@@ -25,6 +25,7 @@ buses/default_bus_layout="uid://dm8qsbvp7rv6n"
 
 window/size/viewport_width=1920
 window/size/viewport_height=1080
+window/size/mode=3
 
 [editor_plugins]
 

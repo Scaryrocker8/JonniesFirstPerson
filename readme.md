@@ -1,4 +1,4 @@
-![preview](icon.svg)
+![icon](icon.svg)
 
 # Jonnie's First Person
 
@@ -38,7 +38,6 @@ I added QOL improvements, as well as things I thought other Godot FPS controller
 
 - A **Demo Project**!
 
-![preview](new_preview.png)
-![preview](preview2.png)
+![preview](preview.png)
 
 Created by Jonnie Gieringer

@@ -1,9 +1,0 @@
-- Fixed rotation bug on startup. Player should have the same starting rotation as in the editor viewport
-
-- Added toggleable idle headbobbing for more immersion
-
-- Added new reticle settings with ability to change their style and size! (using hc's crosshairs and reticles from OpenGameArt)
-
-- Added ability to change camera FOV in Player script with real-time smooth transitioning
-
-- Added options to enable/disable rewpawning when out of bounds
